@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
+
+[[projects]]
   digest = "1:4407e93a89da65e7f7e51768c1a4b20ba035e463f78b3027b791dd4f29174ced"
   name = "github.com/emicklei/go-restful"
   packages = [
@@ -21,6 +29,14 @@
   version = "v1.1.6"
 
 [[projects]]
+  digest = "1:d1f70995feb8132ca8e99b8bba29823c3273f68c239d9ecd93fa5442a56d546f"
+  name = "github.com/mattn/goveralls"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "b71a1e4855f87991aff01c2c833a75a07059c61c"
+  version = "v0.0.2"
+
+[[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
   name = "github.com/modern-go/concurrent"
   packages = ["."]
@@ -36,9 +52,21 @@
   revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
   version = "1.0.1"
 
+[[projects]]
+  branch = "master"
+  digest = "1:f3cab58c41e066ff8423ba97575a6c2c04793f93dee2b85ead7f9c99fbdc2934"
+  name = "golang.org/x/tools"
+  packages = ["cover"]
+  pruneopts = "UT"
+  revision = "d88f79806bbd013f54a668506864ce559edf6f0a"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/emicklei/go-restful"]
+  input-imports = [
+    "github.com/dgrijalva/jwt-go",
+    "github.com/emicklei/go-restful",
+    "github.com/mattn/goveralls",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
