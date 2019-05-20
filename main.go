@@ -4,17 +4,13 @@ import (
 	"fmt"
 	"github.com/DayDayYiDay/atreus-backend/common/auth"
 	"github.com/DayDayYiDay/atreus-backend/common/metadata"
+	"github.com/DayDayYiDay/atreus-backend/common/workDir"
 	"github.com/emicklei/go-restful"
 	"io"
 	"log"
 	"net/http"
 	"os"
 )
-
-// This example shows the minimal code needed to get a restful.WebService working.
-//
-// GET http://localhost:8080/hello
-const uploadPath = "./tmp"
 
 type TarFile struct {
 	fileHash string
@@ -24,22 +20,19 @@ func main() {
 	ws := new(restful.WebService)
 	ws.Route(ws.POST("/upload").To(UploadFileHandler))
 	ws.Route(ws.POST("/signin").To(auth.Signin))
-	//ws.Route(ws.POST("/welcome").To(Welcome))
-	//ws.Route(ws.POST("/refresh").To(UploadFileHandler))
 	restful.Add(ws)
-
-	//http.HandleFunc("/upload", config.UploadFileHandler())
-	//
-	//fs := http.FileServer(http.Dir(uploadPath))
-	//http.Handle("/files/", http.StripPrefix("/files", fs))
-	//
-	log.Print("Server started on localhost:8080, use /upload for uploading files and /files/{fileName} for downloading")
-	// See func authHandler for an example auth handler that produces a token
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Print("Server started on localhost:9444, use /upload for uploading files ")
+	log.Fatal(http.ListenAndServe(":9444", nil))
 }
 
 func UploadFileHandler(req *restful.Request, resp *restful.Response) {
+	WorkPath := "/tmp/"
+	args := os.Args[1:]
+	if len(args) > 0 {
+		for _, s := range args {
+			WorkPath = s
+		}
+	}
 
 	result := make([]interface{}, 0)
 	err := req.Request.ParseMultipartForm(10 << 20)
@@ -53,11 +46,22 @@ func UploadFileHandler(req *restful.Request, resp *restful.Response) {
 		resp.WriteEntity(metadata.NewSuccessResp(result))
 	}
 	defer file.Close()
-	dst, err := os.Create("/tmp/"+ handler.Filename)
+	filename := WorkPath+ handler.Filename
+	dst, err := os.Create(filename)
 	defer dst.Close()
 	if _, err := io.Copy(dst, file); err != nil {
 		log.Fatalln(err)
 	}
+
+	// decompress
+	var r io.Reader
+	r, _ = os.Open(filename)
+	err = workDir.Untar(WorkPath, r)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+
 	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
 	fmt.Printf("File Size: %+v\n", handler.Size)
 	fmt.Printf("MIME Header: %+v\n", handler.Header)
@@ -68,3 +72,4 @@ func UploadFileHandler(req *restful.Request, resp *restful.Response) {
 		log.Fatalln(err)
 	}
 }
+
