@@ -4,3 +4,7 @@ a simple ci/cd platform
 [![Coverage Status](https://coveralls.io/repos/github/DayDayYiDay/atreus-backend/badge.svg?branch=master)](https://coveralls.io/github/DayDayYiDay/atreus-backend?branch=master)
 
 download in https://github.com/DayDayYiDay/atreus-backend/releases
+
+how to use:
+
+atreus-backend <dirname>
