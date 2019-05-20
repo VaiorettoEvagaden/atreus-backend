@@ -5,9 +5,6 @@ os:
   - osx
 go:
   - 1.11.x
-branches:
-  only:
-    - master
 install: go get -u github.com/golang/dep/cmd/dep && dep ensure && go build -o atreus-backend
 script:
   - cd common/auth && go test
